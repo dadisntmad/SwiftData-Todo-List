@@ -13,6 +13,7 @@ struct TodoSheet: View {
     private func addTodo() {
         let todo = TodoModel(text: text)
         modelContext.insert(todo)
+        try? modelContext.save()
         dismiss()
     }
     

@@ -2,6 +2,8 @@ import SwiftUI
 import SwiftData
 
 struct TodoVIew: View {
+    @Environment(\.modelContext) private var modelContext
+    
     @State private var searchText = ""
     @State private var isSheetPresented = false
     
@@ -20,11 +22,12 @@ struct TodoVIew: View {
                 }
                 
                 List {
-                    ForEach(todos) { todo in
+                    ForEach(todos, id: \.id) { todo in
                         TaskContainer(todo: todo)
                             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                 Button(role: .destructive) {
-                                    // Delete action
+                                    modelContext.delete(todo)
+                                    try? modelContext.save()
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
