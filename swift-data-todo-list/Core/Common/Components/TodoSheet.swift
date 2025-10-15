@@ -2,11 +2,18 @@ import SwiftUI
 
 struct TodoSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     
     @State private var text: String = ""
     
     var isTextEmpty: Bool {
         text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+    
+    private func addTodo() {
+        let todo = TodoModel(text: text)
+        modelContext.insert(todo)
+        dismiss()
     }
     
     var body: some View {
@@ -32,7 +39,7 @@ struct TodoSheet: View {
                 Spacer()
                 
                 Button {
-                    dismiss()
+                    addTodo()
                 } label: {
                     Text("Done")
                         .fontWeight(.semibold)
@@ -47,7 +54,7 @@ struct TodoSheet: View {
             
             TextField("Learn SwiftData", text: $text, axis: .vertical)
                 .padding()
- 
+            
             Spacer()
         }
     }

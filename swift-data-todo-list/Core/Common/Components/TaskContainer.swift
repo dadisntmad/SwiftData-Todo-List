@@ -1,14 +1,16 @@
 import SwiftUI
 
 struct TaskContainer: View {
+    let todo: TodoModel
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Implement Todo list using SwiftData")
+            Text(todo.text)
                 .lineLimit(2)
                 .truncationMode(.tail)
             
             HStack {
-                Text("21:03 PM")
+                Text(todo.createdAt, style: .time)
             }
             .font(.caption)
             .foregroundStyle(.gray)
@@ -17,5 +19,5 @@ struct TaskContainer: View {
 }
 
 #Preview {
-    TaskContainer()
+    TaskContainer(todo: TodoModel(id: "", text: "", createdAt: .now))
 }

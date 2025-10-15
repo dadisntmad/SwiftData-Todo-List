@@ -1,15 +1,27 @@
 import SwiftUI
+import SwiftData
 
 struct TodoVIew: View {
     @State private var searchText = ""
     @State private var isSheetPresented = false
     
+    @Query(sort: \TodoModel.createdAt, order: .reverse) var todos: [TodoModel] = []
+    
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottomTrailing) {
+                
+                if todos.isEmpty {
+                    ContentUnavailableView(
+                        "No todos found.",
+                        systemImage: "shippingbox.fill",
+                        description: Text("Add some todos to get started.")
+                    )
+                }
+                
                 List {
-                    ForEach(0..<50, id: \.self) { _ in
-                        TaskContainer()
+                    ForEach(todos) { todo in
+                        TaskContainer(todo: todo)
                             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                 Button(role: .destructive) {
                                     // Delete action
