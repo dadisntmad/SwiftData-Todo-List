@@ -8,12 +8,6 @@ struct TaskContainer: View {
                 .truncationMode(.tail)
             
             HStack {
-                Text("Additional note")
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                
-                Spacer()
-                
                 Text("21:03 PM")
             }
             .font(.caption)

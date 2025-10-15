@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TodoVIew: View {
     @State private var searchText = ""
+    @State private var isSheetPresented = false
     
     var body: some View {
         NavigationStack {
@@ -15,6 +16,7 @@ struct TodoVIew: View {
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
+                                .tint(.red)
                                 
                                 Button {
                                     // Edit action
@@ -30,7 +32,7 @@ struct TodoVIew: View {
                 .searchable(text: $searchText)
                 
                 Button {
-                    // Add action
+                    isSheetPresented = true
                 } label: {
                     Circle()
                         .frame(width: 70, height: 70)
@@ -42,6 +44,9 @@ struct TodoVIew: View {
                                 .imageScale(.large)
                         }
                 }
+            }
+            .sheet(isPresented: $isSheetPresented) {
+                TodoSheet()
             }
         }
         .tint(.black)
