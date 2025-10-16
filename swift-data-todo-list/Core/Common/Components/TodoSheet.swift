@@ -6,6 +6,9 @@ struct TodoSheet: View {
     
     @State private var text: String = ""
     
+    @Binding var isEditMode: Bool
+    @Binding var selectedTodo: TodoModel?
+    
     var isTextEmpty: Bool {
         text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
@@ -17,6 +20,16 @@ struct TodoSheet: View {
         dismiss()
     }
     
+    private func updateTodo() {
+        if let todo = selectedTodo {
+            todo.text = text
+        }
+        try? modelContext.save()
+        isEditMode = false
+        dismiss()
+        selectedTodo = nil
+    }
+    
     var body: some View {
         VStack {
             Capsule()
@@ -26,6 +39,7 @@ struct TodoSheet: View {
             
             HStack {
                 Button {
+                    isEditMode = false
                     dismiss()
                 } label: {
                     Text("Cancel")
@@ -34,15 +48,19 @@ struct TodoSheet: View {
                 
                 Spacer()
                 
-                Text("New Todo")
+                Text(isEditMode ? "Edit Todo" : "Add Todo")
                     .bold()
                 
                 Spacer()
                 
                 Button {
-                    addTodo()
+                    if isEditMode {
+                        updateTodo()
+                    } else {
+                        addTodo()
+                    }
                 } label: {
-                    Text("Done")
+                    Text(isEditMode ? "Save" : "Done")
                         .fontWeight(.semibold)
                 }
                 .tint(.blue)
@@ -58,9 +76,18 @@ struct TodoSheet: View {
             
             Spacer()
         }
+        .onAppear {
+            if !isEditMode {
+                return
+            }
+            
+            if let todo = selectedTodo {
+                text = todo.text
+            }
+        }
     }
 }
 
 #Preview {
-    TodoSheet()
+    TodoSheet(isEditMode: .constant(false), selectedTodo: .constant(nil))
 }

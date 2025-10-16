@@ -6,6 +6,8 @@ struct TodoVIew: View {
     
     @State private var searchText = ""
     @State private var isSheetPresented = false
+    @State private var isEditMode = false
+    @State private var selectedTodo: TodoModel?
     
     @Query(sort: \TodoModel.createdAt, order: .reverse) var todos: [TodoModel] = []
     
@@ -34,7 +36,9 @@ struct TodoVIew: View {
                                 .tint(.red)
                                 
                                 Button {
-                                    // Edit action
+                                    selectedTodo = todo
+                                    isEditMode = true
+                                    isSheetPresented = true
                                 } label: {
                                     Label("Done", systemImage: "pencil")
                                 }
@@ -61,7 +65,7 @@ struct TodoVIew: View {
                 }
             }
             .sheet(isPresented: $isSheetPresented) {
-                TodoSheet()
+                TodoSheet(isEditMode: $isEditMode, selectedTodo: $selectedTodo)
             }
         }
         .tint(.black)
