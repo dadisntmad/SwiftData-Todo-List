@@ -31,18 +31,20 @@ struct TodoVIew: View {
                                     modelContext.delete(todo)
                                     try? modelContext.save()
                                 } label: {
-                                    Label("Delete", systemImage: "trash")
+                                    Image(systemName: "trash")
                                 }
                                 .tint(.red)
+                                
                                 
                                 Button {
                                     selectedTodo = todo
                                     isEditMode = true
                                     isSheetPresented = true
                                 } label: {
-                                    Label("Done", systemImage: "pencil")
+                                    Image(systemName: "pencil")
                                 }
-                                .tint(.gray)
+                                .tint(.gray.opacity(0.5))
+                                
                             }
                     }
                 }

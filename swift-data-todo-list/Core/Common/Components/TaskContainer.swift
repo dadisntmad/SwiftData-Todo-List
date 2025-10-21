@@ -11,6 +11,13 @@ struct TaskContainer: View {
             
             HStack {
                 Text(todo.createdAt, style: .time)
+                
+                Spacer()
+                
+                if todo.isEdited {
+                    Text("Edited")
+                        .italic()
+                }
             }
             .font(.caption)
             .foregroundStyle(.gray)

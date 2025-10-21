@@ -23,6 +23,7 @@ struct TodoSheet: View {
     private func updateTodo() {
         if let todo = selectedTodo {
             todo.text = text
+            todo.isEdited = true
         }
         try? modelContext.save()
         isEditMode = false
