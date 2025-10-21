@@ -27,7 +27,7 @@ struct TodoView: View {
                     ForEach(ArrayUtils.groupByDate(todos: todos).keys.sorted(), id: \.self) { date in
                         Section(header: Text(date.formatted(date: .complete, time: .omitted))) {
                             
-                            let items = ArrayUtils.groupByDate(todos: todos)[date]!
+                            let items = ArrayUtils.groupByDate(todos: todos)[date] ?? []
                             
                             ForEach(items, id: \.id) { todo in
                                 TaskContainer(todo: todo)
@@ -49,6 +49,20 @@ struct TodoView: View {
                                         }
                                         .tint(.gray.opacity(0.5))
                                         
+                                        Button {
+                                            selectedTodo = todo
+                                            
+                                            if let newTodo = selectedTodo {
+                                                newTodo.isCompleted.toggle()
+                                            }
+                                            
+                                            try? modelContext.save()
+                                            
+                                            selectedTodo = nil
+                                        } label: {
+                                            Image(systemName: todo.isCompleted ? "arrow.counterclockwise" : "checkmark")
+                                        }
+                                        .tint(todo.isCompleted ? .gray : .green)
                                     }
                             }
                         }

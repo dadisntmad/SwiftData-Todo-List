@@ -5,9 +5,24 @@ struct TaskContainer: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(todo.text)
-                .lineLimit(2)
-                .truncationMode(.tail)
+            HStack {
+                Text(todo.text)
+                    .lineLimit(2)
+                    .truncationMode(.tail)
+                    .strikethrough(todo.isCompleted)
+                
+                Spacer()
+                
+                
+                if todo.isCompleted {
+                    Image(systemName: "checkmark")
+                        .imageScale(.small)
+                        .foregroundStyle(.white)
+                        .frame(width: 4, height: 4)
+                        .padding(8)
+                        .background(.green, in: Circle())
+                }   
+            }
             
             HStack {
                 Text(todo.createdAt, style: .time)
