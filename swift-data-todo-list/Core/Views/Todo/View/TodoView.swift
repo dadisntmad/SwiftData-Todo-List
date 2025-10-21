@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-struct TodoVIew: View {
+struct TodoView: View {
     @Environment(\.modelContext) private var modelContext
     
     @State private var searchText = ""
@@ -24,34 +24,41 @@ struct TodoVIew: View {
                 }
                 
                 List {
-                    ForEach(todos, id: \.id) { todo in
-                        TaskContainer(todo: todo)
-                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                Button(role: .destructive) {
-                                    modelContext.delete(todo)
-                                    try? modelContext.save()
-                                } label: {
-                                    Image(systemName: "trash")
-                                }
-                                .tint(.red)
-                                
-                                
-                                Button {
-                                    selectedTodo = todo
-                                    isEditMode = true
-                                    isSheetPresented = true
-                                } label: {
-                                    Image(systemName: "pencil")
-                                }
-                                .tint(.gray.opacity(0.5))
-                                
+                    ForEach(ArrayUtils.groupByDate(todos: todos).keys.sorted(), id: \.self) { date in
+                        Section(header: Text(date.formatted(date: .complete, time: .omitted))) {
+                            
+                            let items = ArrayUtils.groupByDate(todos: todos)[date]!
+                            
+                            ForEach(items, id: \.id) { todo in
+                                TaskContainer(todo: todo)
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                        Button(role: .destructive) {
+                                            modelContext.delete(todo)
+                                            try? modelContext.save()
+                                        } label: {
+                                            Image(systemName: "trash")
+                                        }
+                                        .tint(.red)
+                                        
+                                        Button {
+                                            selectedTodo = todo
+                                            isEditMode = true
+                                            isSheetPresented = true
+                                        } label: {
+                                            Image(systemName: "pencil")
+                                        }
+                                        .tint(.gray.opacity(0.5))
+                                        
+                                    }
                             }
+                        }
                     }
                 }
                 .scrollIndicators(.hidden)
                 .listStyle(.plain)
                 .searchable(text: $searchText)
                 
+                // Floating add button
                 Button {
                     isSheetPresented = true
                 } label: {
@@ -75,5 +82,5 @@ struct TodoVIew: View {
 }
 
 #Preview {
-    TodoVIew()
+    TodoView()
 }
