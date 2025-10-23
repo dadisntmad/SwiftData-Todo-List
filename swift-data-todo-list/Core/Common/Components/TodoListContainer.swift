@@ -10,7 +10,7 @@ struct TodoListContainer: View {
     
     @Query private var todos: [TodoModel]
     
-    init (searchText: String) {
+    init(searchText: String) {
         _todos = Query(filter: #Predicate<TodoModel> {
             if searchText.isEmpty {
                 return true
@@ -28,7 +28,6 @@ struct TodoListContainer: View {
                     systemImage: "shippingbox.fill",
                     description: Text("Add some todos to get started.")
                 )
-                
             }
             
             List {
